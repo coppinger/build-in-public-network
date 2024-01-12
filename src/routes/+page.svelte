@@ -65,9 +65,7 @@
 <form
 	method="post"
 	on:submit|preventDefault={async () => {
-		const result = await supabase.auth.signInWithOAuth({
-			provider: 'twitch'
-		});
+		const result = await supabase.auth.linkIdentity({ provider: 'twitch' });
 		console.log(result);
 	}}
 >

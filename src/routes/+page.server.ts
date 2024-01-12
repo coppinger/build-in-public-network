@@ -10,9 +10,5 @@ export async function load({ locals: { getSession } }) {
 }
 
 export const actions = {
-	test: async () => {
-		const { data, error } = await supabase.auth.signInWithOAuth({
-			provider: 'twitch'
-		});
-	}
+	test: async () => {}
 };
