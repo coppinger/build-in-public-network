@@ -6,6 +6,8 @@
 	export let data;
 	const { table } = data;
 	let { session } = data;
+	let { supabase } = data;
+	$: ({ supabase } = data);
 </script>
 
 <Skunk />
@@ -60,7 +62,15 @@
 	></ConfettiOnClick
 >
 
-<form method="post" action="?/test">
+<form
+	method="post"
+	on:submit|preventDefault={async () => {
+		const result = await supabase.auth.signInWithOAuth({
+			provider: 'twitch'
+		});
+		console.log(result);
+	}}
+>
 	<div>
 		<button class="button block">Testerooni</button>
 	</div>

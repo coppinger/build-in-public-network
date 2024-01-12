@@ -14,6 +14,5 @@ export const actions = {
 		const { data, error } = await supabase.auth.signInWithOAuth({
 			provider: 'twitch'
 		});
-		console.log({ data, error });
 	}
 };
