@@ -4,7 +4,7 @@
 	import ConfettiOnClick from '$lib/components/ConfettiOnClick.svelte';
 
 	export let data;
-	// const { table } = data;
+	const { table } = data;
 	let { session } = data;
 </script>
 
@@ -51,6 +51,19 @@
 	> to update the email templates for the SSR auth flow
 </p>
 
-<ConfettiOnClick><Button variant="outline">Noice</Button></ConfettiOnClick>
+<ConfettiOnClick
+	><Button
+		variant="outline"
+		on:click={() => {
+			console.log(table);
+		}}>Noice</Button
+	></ConfettiOnClick
+>
+
+<form method="post" action="?/test">
+	<div>
+		<button class="button block">Testerooni</button>
+	</div>
+</form>
 
 <p class="italic">*based on what?</p>
