@@ -14,6 +14,10 @@ export const GET = async (event) => {
 		if (!error) {
 			throw redirect(303, `/${next.slice(1)}`);
 		}
+		// const { data, error } = await supabase.auth.setSession({
+		// 	access_token: 'value',
+		// 	refresh_token: 'value'
+		// });
 	}
 
 	// return the user to an error page with some instructions

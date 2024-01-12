@@ -17,12 +17,14 @@
 <!-- {#each test as item}
 	<p>{item.id}</p>
 {/each}
+-->
 
 {#if session}
 	<p>Logged in 🔓</p>
+	<p>{session.user.id}</p>
 {:else}
 	<p>Logged out 🔒</p>
-{/if} -->
+{/if}
 
 <ul class="flex gap-2">
 	<li>ShadCN</li>
