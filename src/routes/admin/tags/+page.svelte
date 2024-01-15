@@ -37,7 +37,7 @@
 				// like showing a toast notification.
 				toast(form.message, { icon: '✅' });
 				tagStore.update((tagStore) => {
-					tagStore.push(form.data.title);
+					tagStore.push({ title: form.data.title });
 					return tagStore;
 				});
 			} else {
