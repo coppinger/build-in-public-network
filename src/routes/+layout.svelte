@@ -1,4 +1,5 @@
 <script>
+	import '@fontsource-variable/manrope';
 	import toast, { Toaster } from 'svelte-french-toast';
 	import '../app.pcss';
 </script>
