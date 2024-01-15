@@ -3,8 +3,6 @@
 	import type { SuperValidated } from 'sveltekit-superforms';
 	import type { PageData } from './$types';
 
-	import { writable } from 'svelte/store';
-
 	// Libraries
 	import toast from 'svelte-french-toast';
 	import { superForm } from 'sveltekit-superforms/client';
@@ -14,8 +12,6 @@
 	export let data: PageData;
 	let { tags } = data;
 	const { tagEnums } = data;
-
-	const tagStore = writable(tags);
 
 	// Components
 	import { Check, ChevronsUpDown } from 'lucide-svelte';
@@ -37,10 +33,7 @@
 				// Successful post! Do some more client-side stuff,
 				// like showing a toast notification.
 				toast(form.message, { icon: '✅' });
-				tagStore.update((tagStore) => {
-					tagStore.push({ title: form.data.title });
-					return tagStore;
-				});
+				tags = [...tags, { title: form.data.title }];
 			} else {
 				toast.error(form.message, { icon: '❌' });
 			}
@@ -160,13 +153,13 @@
 			</form>
 		</div>
 		<div class="flex flex-col w-full">
-			<!-- <p class="font-bold">Current tags:</p>
+			<p class="font-bold">Current tags:</p>
 
-		<ul class="list-disc list-inside">
-			{#each $tagStore as tag}
-				<li>{tag.title}</li>
-			{/each}
-		</ul> -->
+			<ul class="list-disc list-inside">
+				{#each tags as tag}
+					<li>{tag.title}</li>
+				{/each}
+			</ul>
 			<div class="container mx-auto py-10">
 				<DataTable />
 			</div>
