@@ -29,6 +29,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
 	import { Label } from '$lib/components/ui/label';
+	import DataTable from './data-table.svelte';
 
 	const { form, errors, constraints, enhance, message } = superForm(data.form, {
 		onUpdated({ form }) {
@@ -158,12 +159,15 @@
 		</form>
 	</div>
 	<div class="flex flex-col w-full">
-		<p class="font-bold">Current tags:</p>
+		<!-- <p class="font-bold">Current tags:</p>
 
 		<ul class="list-disc list-inside">
 			{#each $tagStore as tag}
 				<li>{tag.title}</li>
 			{/each}
-		</ul>
+		</ul> -->
+		<div class="container mx-auto py-10">
+			<DataTable />
+		</div>
 	</div>
 </div>
