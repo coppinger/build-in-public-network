@@ -1,9 +1,20 @@
 import { supabase } from '$lib/index';
-import { setError, message, superValidate } from 'sveltekit-superforms/server';
+import { message, superValidate } from 'sveltekit-superforms/server';
 import { fail } from '@sveltejs/kit';
 import { z } from 'zod';
+import { writable } from 'svelte/store';
+const tags = writable([]);
 
 import type { Actions, PageServerLoad } from './$types';
+
+async function loadTags() {
+	const { data, error } = await supabase.from('tags').select('*');
+	if (error) {
+		console.error('Error loading tags:', error);
+	} else {
+		tags.set(data);
+	}
+}
 
 const schema = z.object({
 	name: z.string().default('Hello world!'),
@@ -15,7 +26,7 @@ export const load: PageServerLoad = async () => {
 	const form = await superValidate(schema);
 
 	// Always return { form } in load and form actions.
-	return { form };
+	return { form, tags };
 };
 
 export const actions: Actions = {
@@ -55,6 +66,10 @@ export const actions: Actions = {
 		const { error } = await supabase
 			.from('test')
 			.insert({ profile_name: form.data.name, email: form.data.email });
+
+		if (error) {
+			return;
+		}
 
 		// Yep, return { form } here too
 		return message(form, 'Email submitted!');
