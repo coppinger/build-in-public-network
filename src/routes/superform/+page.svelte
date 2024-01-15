@@ -1,17 +1,44 @@
 <script lang="ts">
+	import toast from 'svelte-french-toast';
+
 	//import type { PageData } from './$types';
 	import { superForm } from 'sveltekit-superforms/client';
 	import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
 
 	export let data; // : PageData
 
-	const { form, errors, constraints } = superForm(data.form);
+	const { form, errors, constraints, enhance, message } = superForm(data.form, {
+		onUpdated({ form }) {
+			console.log('form:', form);
+			console.log('errors:', errors);
+			console.log('message:', message);
+			if (form.valid) {
+				// Successful post! Do some more client-side stuff,
+				// like showing a toast notification.
+				toast(form.message, { icon: '✅' });
+			} else {
+				toast.error(form.message, { icon: '❌' });
+			}
+		}
+	});
+
+	if ($errors.email) {
+		toast.error(`${$errors.email}`);
+	}
 </script>
 
 <div class="w-fit">
 	<SuperDebug data={$form} />
 
-	<form method="POST">
+	<div class="p-4 border-gray-300 border">
+		{#if $message}
+			<div class="message">{$message}</div>
+		{:else}
+			<div class="message"><p>No message!</p></div>
+		{/if}
+	</div>
+
+	<form method="POST" use:enhance>
 		<label for="name">Name</label>
 		<input
 			type="text"
@@ -32,7 +59,9 @@
 		/>
 		{#if $errors.email}<span class="invalid">{$errors.email}</span>{/if}
 
-		<div><button>Submit</button></div>
+		<div>
+			<button>Submit</button>
+		</div>
 	</form>
 </div>
 
