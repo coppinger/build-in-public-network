@@ -78,7 +78,7 @@
 	<h1 class="">Admin -> Tags</h1>
 	<div class="flex gap-16 max-w-screen-md w-full">
 		<div
-			class="flex justify-center w-full min-w-96 border bg-neutral-50 border-neutral-200 rounded-2xl p-8"
+			class="flex justify-center w-full min-w-96 border bg-neutral-50 border-neutral-200 rounded-2xl p-8 h-fit"
 		>
 			<form method="POST" use:enhance class="flex flex-col gap-8 w-full justify-center">
 				<div class="flex flex-col gap-2">

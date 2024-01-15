@@ -5,8 +5,6 @@
 </script>
 
 <Toaster />
-<div
-	class="min-w-screen flex min-h-screen flex-col items-center justify-center gap-4 bg-neutral-100"
->
+<div class="min-w-screen flex min-h-screen flex-col items-center gap-4 mt-16">
 	<slot />
 </div>
