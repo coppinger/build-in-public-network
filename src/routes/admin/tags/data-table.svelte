@@ -136,7 +136,7 @@
 		}),
 		table.column({
 			accessor: 'enabled',
-			header: '',
+			header: 'Enabled',
 			cell: ({ value, row }) => {
 				return createRender(DataTableRadio, {
 					enabled: value,

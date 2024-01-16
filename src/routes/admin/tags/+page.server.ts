@@ -33,7 +33,7 @@ const tagEnums: TagTypes = [
 ];
 
 async function loadTags() {
-	const { data } = await supabase.from('tags').select('*');
+	const { data } = await supabase.from('tags').select('*').order('id', { ascending: true });
 	return data;
 }
 
@@ -101,13 +101,12 @@ export const actions: Actions = {
 
 		const { data, error } = await supabase
 			.from('tags')
-			.upsert({ id: currentId, enabled: !currentStatus })
-			.select();
+			.update({ enabled: currentStatus })
+			.eq('id', currentId);
 
 		if (error) {
 			console.log(error);
 		}
-
-		return data;
+		console.log(data)
 	}
 };
