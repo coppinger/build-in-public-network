@@ -67,13 +67,18 @@
 		<div class="message"><p>No message!</p></div>
 	{/if}
 </div> -->
-<div class="flex flex-col gap-16">
+<div class="flex flex-col gap-8">
 	<h1 class="">Admin -> Tags</h1>
-	<div class="flex gap-16 max-w-screen-md w-full">
+	<div class="flex gap-8 max-w-screen-xl w-full">
 		<div
-			class="flex justify-center w-full min-w-96 border bg-neutral-50 border-neutral-200 rounded-2xl p-8 h-fit"
+			class="flex justify-center w-full max-w-lg border bg-neutral-50 border-neutral-200 rounded-2xl p-8 h-fit"
 		>
-			<form method="POST" use:enhance class="flex flex-col gap-8 w-full justify-center">
+			<form
+				method="POST"
+				action="?/create"
+				use:enhance
+				class="flex flex-col gap-8 w-full justify-center"
+			>
 				<div class="flex flex-col gap-2">
 					<Label for="email-2">Title</Label>
 					<Input
@@ -153,16 +158,7 @@
 			</form>
 		</div>
 		<div class="flex flex-col w-full">
-			<p class="font-bold">Current tags:</p>
-
-			<ul class="list-disc list-inside">
-				{#each tags as tag}
-					<li>{tag.title}</li>
-				{/each}
-			</ul>
-			<div class="container mx-auto py-10">
-				<DataTable />
-			</div>
+			<DataTable {tags} />
 		</div>
 	</div>
 </div>

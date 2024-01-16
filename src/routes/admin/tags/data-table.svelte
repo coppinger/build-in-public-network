@@ -7,12 +7,25 @@
 	import { Button } from '$lib/components/ui/button';
 	import { ArrowUpDown } from 'lucide-svelte';
 	import { Input } from '$lib/components/ui/input';
+	import DataTableRadio from './data-table-radio.svelte';
+
+	type Tags = {
+		id: number;
+		title: string;
+		slug: string;
+		type: 'business-model' | 'product-type' | 'other';
+		enabled: boolean;
+	};
+
+	export let tags: Tags[];
+
 	type Payment = {
 		id: string;
 		amount: number;
 		status: 'pending' | 'processing' | 'success' | 'failed';
 		email: string;
 	};
+
 	const data: Payment[] = [
 		{
 			id: 'm5gr84i9',
@@ -88,7 +101,8 @@
 		}
 		//...
 	];
-	const table = createTable(readable(data), {
+
+	const table = createTable(readable(tags), {
 		page: addPagination(),
 		sort: addSortBy(),
 		filter: addTableFilter({
@@ -106,29 +120,28 @@
 			}
 		}),
 		table.column({
-			accessor: 'status',
-			header: 'Status'
+			accessor: 'title',
+			header: 'Title'
 		}),
 		table.column({
-			accessor: 'email',
-			header: 'Email'
+			accessor: 'slug',
+			header: 'Slug'
 		}),
 		table.column({
-			accessor: 'amount',
-			header: 'Amount',
+			accessor: 'type',
+			header: 'Type',
 			cell: ({ value }) => {
-				const formatted = new Intl.NumberFormat('en-US', {
-					style: 'currency',
-					currency: 'USD'
-				}).format(value);
-				return formatted;
+				return value;
 			}
 		}),
 		table.column({
-			accessor: ({ id }) => id,
+			accessor: 'enabled',
 			header: '',
-			cell: ({ value }) => {
-				return createRender(DataTableActions, { id: value });
+			cell: ({ value, row }) => {
+				return createRender(DataTableRadio, {
+					enabled: value,
+					id: row.cells[0].value
+				});
 			}
 		})
 	]);
@@ -139,8 +152,8 @@
 	const { filterValue } = pluginStates.filter;
 </script>
 
-<div>
-	<div class="flex items-center py-4">
+<div class="flex flex-col gap-4">
+	<div class="flex items-center">
 		<Input
 			class="max-w-sm bg-neutral-50"
 			placeholder="Filter emails..."

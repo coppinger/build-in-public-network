@@ -52,7 +52,7 @@ export const load: PageServerLoad = async ({ locals: { getSession } }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ request }) => {
+	create: async ({ request }) => {
 		// Use superValidate in form actions too, but with the request
 		const form = await superValidate(request, schema);
 		console.log(form);
@@ -91,5 +91,23 @@ export const actions: Actions = {
 		}
 
 		return message(form, 'Tag submitted!');
+	},
+	toggle: async ({ request }) => {
+		const formData = await request.formData();
+		const currentStatus = formData.get('currentStatus');
+		const currentId = formData.get('currentId');
+		console.log('currentStatus:', currentStatus);
+		console.log('currentId:', currentId);
+
+		const { data, error } = await supabase
+			.from('tags')
+			.upsert({ id: currentId, enabled: !currentStatus })
+			.select();
+
+		if (error) {
+			console.log(error);
+		}
+
+		return data;
 	}
 };
