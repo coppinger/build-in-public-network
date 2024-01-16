@@ -8,6 +8,7 @@
 	import { ArrowUpDown } from 'lucide-svelte';
 	import { Input } from '$lib/components/ui/input';
 	import DataTableRadio from './data-table-radio.svelte';
+	import TagBadge from '$lib/components/TagBadge.svelte';
 
 	type Tags = {
 		id: number;
@@ -131,7 +132,13 @@
 			accessor: 'type',
 			header: 'Type',
 			cell: ({ value }) => {
-				return value;
+				if (value) {
+					return createRender(TagBadge, {
+						type: value
+					});
+				} else {
+					return 'null';
+				}
 			}
 		}),
 		table.column({
