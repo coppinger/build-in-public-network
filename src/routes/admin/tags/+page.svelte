@@ -1,7 +1,7 @@
 <script lang="ts">
 	// Types
 	import type { SuperValidated } from 'sveltekit-superforms';
-	import type { PageData } from './$types';
+	import type { PageData, ActionData } from './$types';
 
 	// Libraries
 	import toast from 'svelte-french-toast';
@@ -12,6 +12,11 @@
 	export let data: PageData;
 	let { tags } = data;
 	const { tagEnums } = data;
+
+	// Store
+	import { tagsStore } from '$lib/stores/tagsStore';
+
+	tagsStore.set(tags);
 
 	// Components
 	import { Check, ChevronsUpDown } from 'lucide-svelte';
@@ -32,8 +37,23 @@
 			if (form.valid) {
 				// Successful post! Do some more client-side stuff,
 				// like showing a toast notification.
-				toast(form.message, { icon: '✅' });
-				tags = [...tags, { title: form.data.title }];
+				toast(form.message.text, { icon: '✅' });
+
+				// console.log('page.svelte', form.message);
+
+				// console.log(form);
+
+				tagsStore.update((tags) => [
+					{
+						title: form.data.title,
+						id: form.message.newId,
+						slug: form.message.slug,
+						type: form.message.type
+					},
+					...tags
+				]);
+
+				console.log($tagsStore);
 			} else {
 				toast.error(form.message, { icon: '❌' });
 			}
@@ -67,11 +87,11 @@
 		<div class="message"><p>No message!</p></div>
 	{/if}
 </div> -->
-<div class="flex flex-col gap-8">
+<div class="flex flex-col gap-8 max-w-screen-lg w-full">
 	<h1 class="">Admin -> Tags</h1>
-	<div class="flex gap-8 max-w-screen-xl w-full">
+	<div class="flex gap-8 w-full basis-1/4 shrink-1 grow">
 		<div
-			class="flex justify-center w-full max-w-lg border bg-neutral-50 border-neutral-200 rounded-2xl p-8 h-fit"
+			class="flex justify-center w-full max-w-xs border bg-neutral-50 border-neutral-200 rounded-2xl p-8 h-fit shrink-0"
 		>
 			<form
 				method="POST"
@@ -82,6 +102,7 @@
 				<div class="flex flex-col gap-2">
 					<Label for="email-2">Title</Label>
 					<Input
+						class="bg-white"
 						type="text"
 						id="title"
 						name="title"
@@ -95,6 +116,7 @@
 				<div class="flex flex-col gap-2">
 					<Label for="email-2">Description</Label>
 					<Textarea
+						class="bg-white"
 						id="description"
 						name="description"
 						placeholder="For projects that are very naughty."
@@ -104,7 +126,7 @@
 					<p class="text-sm text-muted-foreground">The description of the new tag.</p>
 					{#if $errors.description}<span class="text-red-500">{$errors.description}</span>{/if}
 				</div>
-				<div class="">
+				<div class="w-full">
 					<Popover.Root bind:open let:ids>
 						<Popover.Trigger asChild let:builder>
 							<Button
@@ -112,7 +134,7 @@
 								variant="outline"
 								role="combobox"
 								aria-expanded={open}
-								class="w-[200px] justify-between"
+								class="w-full justify-between"
 							>
 								{selectedValue}
 								<ChevronsUpDown class="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -153,12 +175,12 @@
 					/>
 				</div>
 				<div>
-					<Button type="submit">Submit</Button>
+					<Button type="submit" class="w-full">Submit</Button>
 				</div>
 			</form>
 		</div>
-		<div class="flex flex-col w-full">
-			<DataTable {tags} />
+		<div class="flex flex-col w-full basis-3/4 shrink-1 grow">
+			<div class="w-full"><DataTable {tags} /></div>
 		</div>
 	</div>
 </div>

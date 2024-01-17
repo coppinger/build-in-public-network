@@ -4,17 +4,25 @@
 
 	let color = 'blue';
 
-	// switch (type) {
-	// 	case 'business-model':
-	// 		color;
-	// 		break;
+	// To do, change from switch to if/else
 
-	// 	default:
-	// 		break;
-	// }
+	switch (type) {
+		case 'business-model':
+			color = 'blue';
+			text = 'Model';
+			break;
+		case 'product-type':
+			color = 'teal';
+			text = 'Product';
+			break;
+		case 'other':
+			color = 'purple';
+			text = 'Other';
+			break;
+	}
 </script>
 
 <a
 	href={`/tags/${type}`}
-	class={cn(`text-xs font-semibold p-1.5 bg-${color}-200 text-${color}-700 rounded`)}>{type}</a
+	class={cn(`text-xs font-semibold p-1.5 bg-${color}-200 text-${color}-700 rounded`)}>{text}</a
 >

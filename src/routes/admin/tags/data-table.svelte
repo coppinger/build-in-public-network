@@ -1,14 +1,20 @@
 <script lang="ts">
 	import { createTable, Render, Subscribe, createRender } from 'svelte-headless-table';
 	import { addPagination, addSortBy, addTableFilter } from 'svelte-headless-table/plugins';
-	import { readable } from 'svelte/store';
+	import { writable } from 'svelte/store';
+
+	// Components
 	import * as Table from '$lib/components/ui/table';
-	import DataTableActions from './data-table-actions.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { ArrowUpDown } from 'lucide-svelte';
 	import { Input } from '$lib/components/ui/input';
 	import DataTableRadio from './data-table-radio.svelte';
 	import TagBadge from '$lib/components/TagBadge.svelte';
+
+	// Store
+	import { tagsStore } from '$lib/stores/tagsStore';
+
+	export let tags;
 
 	type Tags = {
 		id: number;
@@ -18,98 +24,14 @@
 		enabled: boolean;
 	};
 
-	export let tags: Tags[];
-
-	type Payment = {
-		id: string;
-		amount: number;
-		status: 'pending' | 'processing' | 'success' | 'failed';
-		email: string;
-	};
-
-	const data: Payment[] = [
-		{
-			id: 'm5gr84i9',
-			amount: 316,
-			status: 'success',
-			email: 'ken99@yahoo.com'
-		},
-		{
-			id: 'm5gr84i9',
-			amount: 214,
-			status: 'processing',
-			email: 'jimmy@yahoo.com'
-		},
-		{
-			id: 'm5gr84i9',
-			amount: 1337,
-			status: 'pending',
-			email: 'bob@yahoo.com'
-		},
-		{
-			id: 'm5gr84i9',
-			amount: 316,
-			status: 'success',
-			email: 'ken99@yahoo.com'
-		},
-		{
-			id: 'm5gr84i9',
-			amount: 214,
-			status: 'processing',
-			email: 'jimmy@yahoo.com'
-		},
-		{
-			id: 'm5gr84i9',
-			amount: 1337,
-			status: 'pending',
-			email: 'bob@yahoo.com'
-		},
-		{
-			id: 'm5gr84i9',
-			amount: 316,
-			status: 'success',
-			email: 'ken99@yahoo.com'
-		},
-		{
-			id: 'm5gr84i9',
-			amount: 214,
-			status: 'processing',
-			email: 'jimmy@yahoo.com'
-		},
-		{
-			id: 'm5gr84i9',
-			amount: 1337,
-			status: 'pending',
-			email: 'bob@yahoo.com'
-		},
-		{
-			id: 'm5gr84i9',
-			amount: 316,
-			status: 'success',
-			email: 'ken99@yahoo.com'
-		},
-		{
-			id: 'm5gr84i9',
-			amount: 214,
-			status: 'processing',
-			email: 'jimmy@yahoo.com'
-		},
-		{
-			id: 'm5gr84i9',
-			amount: 1337,
-			status: 'pending',
-			email: 'bob@yahoo.com'
-		}
-		//...
-	];
-
-	const table = createTable(readable(tags), {
+	const table = createTable(tagsStore, {
 		page: addPagination(),
 		sort: addSortBy(),
 		filter: addTableFilter({
 			fn: ({ filterValue, value }) => value.toLowerCase().includes(filterValue.toLowerCase())
 		})
 	});
+
 	const columns = table.createColumns([
 		table.column({
 			accessor: 'id',
@@ -130,24 +52,16 @@
 		}),
 		table.column({
 			accessor: 'type',
-			header: 'Type',
-			cell: ({ value }) => {
-				if (value) {
-					return createRender(TagBadge, {
-						type: value
-					});
-				} else {
-					return 'null';
-				}
-			}
+			header: 'Type'
 		}),
 		table.column({
 			accessor: 'enabled',
 			header: 'Enabled',
+
 			cell: ({ value, row }) => {
 				return createRender(DataTableRadio, {
 					enabled: value,
-					id: row.cells[0].value
+					id: row.cellForId.id.value
 				});
 			}
 		})
@@ -159,7 +73,7 @@
 	const { filterValue } = pluginStates.filter;
 </script>
 
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-4 w-full">
 	<div class="flex items-center">
 		<Input
 			class="max-w-sm bg-neutral-50"
@@ -168,12 +82,12 @@
 			bind:value={$filterValue}
 		/>
 	</div>
-	<div class="rounded-md border bg-neutral-50">
+	<div class="rounded-md border bg-neutral-50 w-full">
 		<Table.Root {...$tableAttrs}>
-			<Table.Header>
+			<Table.Header class="w-full">
 				{#each $headerRows as headerRow}
 					<Subscribe rowAttrs={headerRow.attrs()}>
-						<Table.Row>
+						<Table.Row class="w-full">
 							{#each headerRow.cells as cell (cell.id)}
 								<Subscribe attrs={cell.attrs()} let:attrs props={cell.props()} let:props>
 									<Table.Head {...attrs}>
@@ -201,15 +115,18 @@
 					<Subscribe rowAttrs={row.attrs()} let:rowAttrs>
 						<Table.Row {...rowAttrs}>
 							{#each row.cells as cell (cell.id)}
+								<pre>{cell.value}</pre>
 								<Subscribe attrs={cell.attrs()} let:attrs>
 									<Table.Cell {...attrs}>
 										{#if cell.id === 'amount'}
 											<div class="text-right font-medium font-black">
 												<Render of={cell.render()} />
 											</div>
-										{:else if cell.id === 'status'}
+										{:else if cell.id === 'type'}
 											<div class="capitalize font-bold">
-												<Render of={cell.render()} />
+												<!-- <Render of={cell.render()} /> -->
+												<TagBadge type={cell.value} />
+												<p>{cell.value}</p>
 											</div>
 										{:else}
 											<Render of={cell.render()} />

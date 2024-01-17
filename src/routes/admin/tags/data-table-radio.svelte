@@ -5,8 +5,6 @@
 
 	export let enabled: boolean;
 	export let id: number;
-
-	let idNum = id;
 </script>
 
 <form
@@ -19,6 +17,6 @@
 	}}
 >
 	<Switch bind:checked={enabled} type="submit" />
-	<input class="hidden" aria-hidden type="text" name="currentStatus" bind:value={enabled} />
-	<input class="hidden" aria-hidden type="text" name="currentId" value={idNum} />
+	<input aria-hidden type="text" name="currentStatus" bind:value={enabled} />
+	<input aria-hidden type="text" name="currentId" bind:value={id} />
 </form>

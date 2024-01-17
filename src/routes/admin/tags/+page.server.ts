@@ -3,6 +3,7 @@ import slugify from 'slugify';
 import { message, superValidate } from 'sveltekit-superforms/server';
 import { fail } from '@sveltejs/kit';
 import { z } from 'zod';
+import { tagsStore } from '$lib/stores/tagsStore';
 
 import type { Actions, PageServerLoad } from './$types';
 
@@ -33,7 +34,7 @@ const tagEnums: TagTypes = [
 ];
 
 async function loadTags() {
-	const { data } = await supabase.from('tags').select('*').order('id', { ascending: true });
+	const { data } = await supabase.from('tags').select('*').order('id', { ascending: false });
 	return data;
 }
 
@@ -46,8 +47,7 @@ export const load: PageServerLoad = async ({ locals: { getSession } }) => {
 		form,
 		tags: (await loadTags()) ?? [],
 		session: await getSession(),
-		tagEnums,
-		boop: ['1', '2']
+		tagEnums
 	};
 };
 
@@ -55,7 +55,6 @@ export const actions: Actions = {
 	create: async ({ request }) => {
 		// Use superValidate in form actions too, but with the request
 		const form = await superValidate(request, schema);
-		console.log(form);
 
 		// Convenient validation check:
 		if (!form.valid) {
@@ -63,7 +62,7 @@ export const actions: Actions = {
 			return fail(400, { form });
 		}
 
-		const { data: tagData, error: tagError } = await supabase
+		const { error: tagError } = await supabase
 			.from('tags')
 			.select()
 			.eq('title', form.data.title)
@@ -79,27 +78,33 @@ export const actions: Actions = {
 			return message(form, 'That tag already exists');
 		}
 
-		const { error } = await supabase.from('tags').insert({
-			title: form.data.title,
-			description: form.data.description,
-			type: form.data.type,
-			slug: slugify(form.data.title, { lower: true })
-		});
+		const { data, error } = await supabase
+			.from('tags')
+			.insert({
+				title: form.data.title,
+				description: form.data.description,
+				type: form.data.type,
+				slug: slugify(form.data.title, { lower: true })
+			})
+			.select('id');
 
 		if (error) {
 			return console.log(error);
 		}
 
-		return message(form, 'Tag submitted!');
+		return message(form, {
+			text: 'Tag submitted!',
+			newId: data[0].id,
+			type: form.data.type,
+			slug: slugify(form.data.title, { lower: true })
+		});
 	},
 	toggle: async ({ request }) => {
 		const formData = await request.formData();
 		const currentStatus = formData.get('currentStatus');
 		const currentId = formData.get('currentId');
-		console.log('currentStatus:', currentStatus);
-		console.log('currentId:', currentId);
 
-		const { data, error } = await supabase
+		const { error } = await supabase
 			.from('tags')
 			.update({ enabled: currentStatus })
 			.eq('id', currentId);
@@ -107,6 +112,5 @@ export const actions: Actions = {
 		if (error) {
 			console.log(error);
 		}
-		console.log(data)
 	}
 };

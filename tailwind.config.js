@@ -7,7 +7,7 @@ const config = {
 	safelist: [
 		'dark',
 		{
-			pattern: /bg-(blue|teal|purple)-(200|700)/
+			pattern: /(bg|text)-(blue|teal|purple)-(200|700)/
 		}
 	],
 	theme: {

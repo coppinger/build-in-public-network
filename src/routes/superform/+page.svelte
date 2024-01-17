@@ -9,9 +9,6 @@
 
 	const { form, errors, constraints, enhance, message } = superForm(data.form, {
 		onUpdated({ form }) {
-			console.log('form:', form);
-			console.log('errors:', errors);
-			console.log('message:', message);
 			if (form.valid) {
 				// Successful post! Do some more client-side stuff,
 				// like showing a toast notification.
