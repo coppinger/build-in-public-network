@@ -2,27 +2,25 @@
 	import { cn } from '$lib/utils';
 	export let type: string;
 
-	let color = 'blue';
+	let color: string;
+	let text: string;
+
+	$: if (type === 'business-model') {
+		color = 'blue';
+		text = 'Model';
+	} else if (type === 'product-type') {
+		color = 'teal';
+		text = 'Product';
+	} else {
+		color = 'purple';
+		text = 'Other';
+	}
 
 	// To do, change from switch to if/else
-
-	switch (type) {
-		case 'business-model':
-			color = 'blue';
-			text = 'Model';
-			break;
-		case 'product-type':
-			color = 'teal';
-			text = 'Product';
-			break;
-		case 'other':
-			color = 'purple';
-			text = 'Other';
-			break;
-	}
 </script>
 
 <a
 	href={`/tags/${type}`}
-	class={cn(`text-xs font-semibold p-1.5 bg-${color}-200 text-${color}-700 rounded`)}>{text}</a
+	class={cn(`text-xs w-fit font-semibold p-1.5 bg-${color}-200 text-${color}-700 rounded`)}
+	>{text}</a
 >

@@ -13,6 +13,10 @@ const schema = z.object({
 	type: z.string()
 });
 
+const deleteSchema = z.object({
+	id: z.number()
+})
+
 type TagTypes = {
 	value: string;
 	label: string;
@@ -41,10 +45,13 @@ async function loadTags() {
 export const load: PageServerLoad = async ({ locals: { getSession } }) => {
 	// Server API:
 	const form = await superValidate(schema);
+	const deleteForm = await superValidate(deleteSchema);
+
 
 	// Always return { form } in load and form actions.
 	return {
 		form,
+		deleteForm,
 		tags: (await loadTags()) ?? [],
 		session: await getSession(),
 		tagEnums
@@ -112,5 +119,19 @@ export const actions: Actions = {
 		if (error) {
 			console.log(error);
 		}
-	}
+	},
+	delete: async ({ request }) => {
+				// Use superValidate in form actions too, but with the request
+				const formData = await request.formData();
+		const currentId = formData.get('currentId');
+
+		console.log(currentId);
+
+		const { error } = await supabase
+			.from('tags')
+			.delete()
+			.eq('id', currentId);
+
+		console.log(error);
+	},
 };

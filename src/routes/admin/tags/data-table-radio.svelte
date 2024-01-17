@@ -17,6 +17,6 @@
 	}}
 >
 	<Switch bind:checked={enabled} type="submit" />
-	<input aria-hidden type="text" name="currentStatus" bind:value={enabled} />
-	<input aria-hidden type="text" name="currentId" bind:value={id} />
+	<input class="hidden" aria-hidden type="text" name="currentStatus" bind:value={enabled} />
+	<input class="hidden" aria-hidden type="text" name="currentId" bind:value={id} />
 </form>

@@ -9,12 +9,14 @@
 	import { ArrowUpDown } from 'lucide-svelte';
 	import { Input } from '$lib/components/ui/input';
 	import DataTableRadio from './data-table-radio.svelte';
+	import DataTableDelete from './data-table-delete.svelte';
 	import TagBadge from '$lib/components/TagBadge.svelte';
 
 	// Store
 	import { tagsStore } from '$lib/stores/tagsStore';
 
 	export let tags;
+	export let deleteForm;
 
 	type Tags = {
 		id: number;
@@ -62,6 +64,16 @@
 				return createRender(DataTableRadio, {
 					enabled: value,
 					id: row.cellForId.id.value
+				});
+			}
+		}),
+		table.column({
+			id: 'delete',
+			header: 'Delete',
+			cell: ({ row, deleteForm }) => {
+				return createRender(DataTableDelete, {
+					id: row.cellForId.id.value,
+					deleteForm: deleteForm
 				});
 			}
 		})
@@ -115,7 +127,6 @@
 					<Subscribe rowAttrs={row.attrs()} let:rowAttrs>
 						<Table.Row {...rowAttrs}>
 							{#each row.cells as cell (cell.id)}
-								<pre>{cell.value}</pre>
 								<Subscribe attrs={cell.attrs()} let:attrs>
 									<Table.Cell {...attrs}>
 										{#if cell.id === 'amount'}
@@ -124,9 +135,7 @@
 											</div>
 										{:else if cell.id === 'type'}
 											<div class="capitalize font-bold">
-												<!-- <Render of={cell.render()} /> -->
 												<TagBadge type={cell.value} />
-												<p>{cell.value}</p>
 											</div>
 										{:else}
 											<Render of={cell.render()} />
