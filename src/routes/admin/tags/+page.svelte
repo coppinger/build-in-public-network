@@ -197,15 +197,15 @@
 						/>
 						<div class="flex flex-col gap-4 mt-4 border rounded-xl p-4 b-neutral-200">
 							<div class="flex justify-between items-center">
-								<TagBadge type="business-model" />
+								<TagBadge tabIndex={-1} type="business-model" />
 								<p class="text-xs text-neutral-500">Business Model</p>
 							</div>
 							<div class="flex justify-between items-center">
-								<TagBadge type="product-type" />
+								<TagBadge tabIndex={-1} type="product-type" />
 								<p class="text-xs text-neutral-500">Product Type</p>
 							</div>
 							<div class="flex justify-between items-center">
-								<TagBadge type="other" />
+								<TagBadge tabIndex={-1} type="other" />
 								<p class="text-xs text-neutral-500">Other</p>
 							</div>
 						</div>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
 	export let type: string;
+	export let tabIndex: boolean = false;
 
 	let color: string;
 	let text: string;
@@ -21,6 +22,7 @@
 
 <a
 	href={`/tags/${type}`}
+	tabindex={tabIndex}
 	class={cn(`text-xs w-fit font-semibold p-1.5 bg-${color}-200 text-${color}-700 rounded`)}
 	>{text}</a
 >
