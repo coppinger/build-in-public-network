@@ -1,10 +1,15 @@
 import { supabase } from '$lib/index';
 
 export async function load({ locals: { getSession } }) {
-	const { data } = await supabase.from('test').select();
+	const { data, error } = await supabase
+		.from('profiles')
+		.select('*, profiles_tags ( tag_id, tags ( title, slug, type  ) )');
+
+	console.log(data[0].profiles_tags);
+	// console.log(error);
 
 	return {
-		table: data ?? [],
+		profiles: data ?? [],
 		session: await getSession()
 	};
 }

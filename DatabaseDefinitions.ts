@@ -9,6 +9,123 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      profiles: {
+        Row: {
+          active: boolean
+          created_at: string
+          deleted_at: string | null
+          disabled_at: string | null
+          exits: number
+          id: number
+          location: string
+          name: string
+          pfp_url: string
+          revenue: number
+          slug: string
+          started_on: string
+          updated_at: string | null
+        }
+        Insert: {
+          active: boolean
+          created_at?: string
+          deleted_at?: string | null
+          disabled_at?: string | null
+          exits: number
+          id?: number
+          location: string
+          name: string
+          pfp_url?: string
+          revenue: number
+          slug: string
+          started_on: string
+          updated_at?: string | null
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          deleted_at?: string | null
+          disabled_at?: string | null
+          exits?: number
+          id?: number
+          location?: string
+          name?: string
+          pfp_url?: string
+          revenue?: number
+          slug?: string
+          started_on?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      salutes: {
+        Row: {
+          created_at: string
+          id: number
+          salutee: number
+          saluter: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          salutee: number
+          saluter: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          salutee?: number
+          saluter?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "salutes_salutee_fkey"
+            columns: ["salutee"]
+            isOneToOne: false
+            referencedRelation: "waitlist"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "salutes_saluter_fkey"
+            columns: ["saluter"]
+            isOneToOne: false
+            referencedRelation: "waitlist"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      tags: {
+        Row: {
+          created_at: string
+          description: string
+          enabled: boolean
+          id: number
+          slug: string
+          title: string
+          type: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          enabled?: boolean
+          id?: number
+          slug: string
+          title: string
+          type: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          enabled?: boolean
+          id?: number
+          slug?: string
+          title?: string
+          type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       test: {
         Row: {
           created_at: string
@@ -27,6 +144,36 @@ export interface Database {
           email?: string
           id?: number
           profile_name?: string | null
+        }
+        Relationships: []
+      }
+      waitlist: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: number
+          name: string | null
+          referral_id: string | null
+          referred_by: string | null
+          twitter_handle: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: number
+          name?: string | null
+          referral_id?: string | null
+          referred_by?: string | null
+          twitter_handle?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: number
+          name?: string | null
+          referral_id?: string | null
+          referred_by?: string | null
+          twitter_handle?: string | null
         }
         Relationships: []
       }

@@ -15,7 +15,7 @@ const schema = z.object({
 
 const deleteSchema = z.object({
 	id: z.number()
-})
+});
 
 type TagTypes = {
 	value: string;
@@ -46,7 +46,6 @@ export const load: PageServerLoad = async ({ locals: { getSession } }) => {
 	// Server API:
 	const form = await superValidate(schema);
 	const deleteForm = await superValidate(deleteSchema);
-
 
 	// Always return { form } in load and form actions.
 	return {
@@ -91,6 +90,7 @@ export const actions: Actions = {
 				title: form.data.title,
 				description: form.data.description,
 				type: form.data.type,
+				enabled: true,
 				slug: slugify(form.data.title, { lower: true })
 			})
 			.select('id');
@@ -121,17 +121,14 @@ export const actions: Actions = {
 		}
 	},
 	delete: async ({ request }) => {
-				// Use superValidate in form actions too, but with the request
-				const formData = await request.formData();
+		// Use superValidate in form actions too, but with the request
+		const formData = await request.formData();
 		const currentId = formData.get('currentId');
 
 		console.log(currentId);
 
-		const { error } = await supabase
-			.from('tags')
-			.delete()
-			.eq('id', currentId);
+		const { error } = await supabase.from('tags').delete().eq('id', currentId);
 
 		console.log(error);
-	},
+	}
 };
