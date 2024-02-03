@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Tag from '../Tag.svelte';
 	import TagBadge from '../TagBadge.svelte';
+	import PlatformBadge from './PlatformBadge.svelte';
 
 	export let profile;
 	const {
@@ -47,7 +48,12 @@
 			{#each profile_tags as profile_tag}
 				<Tag {profile_tag} />
 			{/each}
+			<li>
+				<a href="#" class="text-neutral-500 font-semibold text-xs">view all tags</a>
+			</li>
 		</ul>
-		<a href="#" class="text-neutral-500 font-semibold text-xs">view all tags</a>
+	</div>
+	<div class="">
+		<PlatformBadge />
 	</div>
 </div>
