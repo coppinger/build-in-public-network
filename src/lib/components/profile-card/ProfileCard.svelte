@@ -54,6 +54,7 @@
 		</ul>
 	</div>
 	<div class="">
-		<PlatformBadge />
+		<PlatformBadge platform="twitter" />
+		<PlatformBadge platform="discord" />
 	</div>
 </div>
